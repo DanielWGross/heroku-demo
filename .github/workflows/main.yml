@@ -6,33 +6,45 @@ on:
       - main
 
 jobs:
-  setup:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3.8.1
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
-          node-version: 16.x
+          node-version: 16
 
       - name: NPM Install
         run: npm install
 
-  lint:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Lint
+      - name: Lint & Format
         run: npm run lint
 
   deploy:
-    needs: setup
-    uses: akhileshns/heroku-deploy@v3.12.14
-    with:
-      heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-      heroku_app_name: shrouded-escarpment-24419
-      heroku_email: danwgross@gmail.com
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: NPM Install
+        run: npm install
+
+      - name: Deploy
+        uses: akhileshns/heroku-deploy@v3.12.14
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: shrouded-escarpment-24419
+          heroku_email: danwgross@gmail.com
