@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  lint:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,12 +22,17 @@ jobs:
       - name: NPM Install
         run: npm install
 
-      - name: Lint & Format
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint
         run: npm run lint
 
-      - name: Deploy
-        uses: akhileshns/heroku-deploy@v3.12.14
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: shrouded-escarpment-24419
-          heroku_email: danwgross@gmail.com
+  deploy:
+    needs: setup
+    uses: akhileshns/heroku-deploy@v3.12.14
+    with:
+      heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+      heroku_app_name: shrouded-escarpment-24419
+      heroku_email: danwgross@gmail.com
