@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Lint & Format
-        run: npm run lint:fix
+        run: npm run lint
 
       - name: Deploy
         uses: akhileshns/heroku-deploy@v3.12.14
