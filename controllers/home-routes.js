@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require('express').Router()
 const { Gallery, Painting } = require('../models')
 
 // GET all galleries for homepage
